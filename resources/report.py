@@ -20,13 +20,13 @@ class Report(Resource):
         required=True,
         help="This field cannot be left blank!"
     )
-    parser.add_argument('pressure',
+    parser.add_argument('temperature',
         type=int,
         required=True,
         help="This field cannot be left blank!"
     )
-    parser.add_argument('temperature',
-        type=int,
+    parser.add_argument('is_locked',
+        type=bool,
         required=True,
         help="This field cannot be left blank!"
     )
@@ -36,22 +36,22 @@ class Report(Resource):
         help="All reports must have a transport_id!"
     )
 
-    @jwt_required()
+    # @jwt_required()
     def get(self, transport_id):
         report = ReportModel.find_by_transport_id(transport_id)
         if report:
             return report.json()
-        return {'message': 'Report not found'}, 404
+        return {'error_message': 'Report not found'}, 404
 
     def post(self, transport_id):
         data = Report.parser.parse_args()
 
-        report = ReportModel(data['date'], data['latitude'], data['longitude'], data['pressure'], data['temperature'], data['transport_id'])
+        report = ReportModel(data['date'], data['latitude'], data['longitude'], data['temperature'], data['is_locked'], data['transport_id'])
 
         try:
             report.save_to_db()
         except:
-            return {"message": "An error occurred inserting the report."}, 500
+            return {"error_message": "An error occurred inserting the report."}, 500
 
         return report.json(), 201
 
@@ -59,8 +59,8 @@ class Report(Resource):
         report = ReportModel.find_by_transport_id(transport_id)
         if report:
             report.delete_from_db()
-            return {'message': 'Report deleted'}
-        return {'message': 'Report not encountered'}
+            return {'success_message': 'Report deleted'}
+        return {'error_message': 'Report not encountered'}
 
     def put(self, transport_id):
         data = Report.parser.parse_args()
