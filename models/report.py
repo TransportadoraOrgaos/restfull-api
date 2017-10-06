@@ -8,7 +8,7 @@ class ReportModel(db.Model):
     latitude = db.Column(db.Integer)
     longitude = db.Column(db.Integer)
     temperature = db.Column(db.Integer)
-    is_locked = db.Column(db.Boolean)
+    is_locked = db.Column(db.Integer)
 
     transport_id = db.Column(db.Integer, db.ForeignKey('transports.id'))
     transport = db.relationship('TransportModel')
@@ -33,7 +33,7 @@ class ReportModel(db.Model):
 
     @classmethod
     def find_by_transport_id(cls, transport_id):
-        return cls.query.filter_by(transport_id=transport_id).first()
+        return cls.query.filter_by(transport_id=transport_id).all()
 
     def save_to_db(self):
         db.session.add(self)

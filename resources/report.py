@@ -26,7 +26,7 @@ class Report(Resource):
         help="This field cannot be left blank!"
     )
     parser.add_argument('is_locked',
-        type=bool,
+        type=int,
         required=True,
         help="This field cannot be left blank!"
     )
@@ -38,15 +38,16 @@ class Report(Resource):
 
     # @jwt_required()
     def get(self, transport_id):
-        report = ReportModel.find_by_transport_id(transport_id)
-        if report:
-            return report.json()
-        return {'error_message': 'Report not found'}, 404
+        return {'reports': list(map(lambda x: x.json(), ReportModel.query.filter_by(transport_id=transport_id).all()))}
+        #report = ReportModel.find_by_transport_id(transport_id)
+        #if report:
+        #    return {'reports': [report.json() for report in self.ReportModel.all()]}
+        #return {'error_message': 'Report not found'}, 404
 
     def post(self, transport_id):
         data = Report.parser.parse_args()
 
-        report = ReportModel(data['date'], data['latitude'], data['longitude'], data['temperature'], data['is_locked'], data['transport_id'])
+        report = ReportModel(data['date'], data['latitude'], data['longitude'], data['temperature'], data['transport_id'], data['is_locked'])
 
         try:
             report.save_to_db()
@@ -68,7 +69,7 @@ class Report(Resource):
         report = ReportModel.find_by_transport_id(transport_id)
 
         if report:
-            report.price = data['date']
+            report.date = data['date']
         else:
             report = ReportModel(transport_id, data['date'])
 
