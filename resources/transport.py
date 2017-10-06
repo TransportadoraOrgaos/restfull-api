@@ -2,6 +2,19 @@ from flask_restful import Resource, reqparse
 from models.transport import TransportModel
 
 class Transport(Resource):
+    parser = reqparse.RequestParser()
+    
+    parser.add_argument('organ',
+        type=str,
+        required=True,
+        help="This field cannot be left blank!"
+    )
+    parser.add_argument('responsible',
+        type=str,
+        required=True,
+        help="This field cannot be left blank!"
+    )
+
     def get(self, id):
         transport = TransportModel.find_by_id(id)
         if transport:
@@ -12,7 +25,8 @@ class Transport(Resource):
         if TransportModel.find_by_name(name):
             return {'error_message': "A transport with name '{}' already exists.".format(name)}, 400
 
-        data = Report.parser.parse_args()
+        data = Transport.parser.parse_args()
+
         transport = TransportModel(name, data['organ'], data['responsible'])
 
         try:
@@ -21,18 +35,6 @@ class Transport(Resource):
             return {"error_message": "An error occurred creating the transport."}, 500
 
         return transport.json(), 201
-
-
-
-        try:
-            report.save_to_db()
-        except:
-            return {"error_message": "An error occurred inserting the report."}, 500
-
-        return report.json(), 201
-
-
-
 
     def delete(self, name):
         transport = TransportModel.find_by_name(name)

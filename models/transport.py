@@ -10,11 +10,13 @@ class TransportModel(db.Model):
 
     reports = db.relationship('ReportModel', lazy='dynamic')
 
-    def __init__(self, name):
+    def __init__(self, name, organ, responsible):
         self.name = name
+        self.organ = organ
+        self.responsible = responsible
 
     def json(self):
-        return {'id': self.id, 'name': self.name, 'organ': self.name, 'responsible': self.responsible, 'reports': [report.json() for report in self.reports.all()]}
+        return {'id': self.id, 'name': self.name, 'organ': self.organ, 'responsible': self.responsible, 'reports': [report.json() for report in self.reports.all()]}
 
     @classmethod
     def find_by_name(cls, name):
