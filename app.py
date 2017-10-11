@@ -7,7 +7,7 @@ from flask_jwt import JWT
 from security import authenticate, identity
 from resources.user import UserRegister
 from resources.report import Report, ReportList
-from resources.transport import Transport, TransportList
+from resources.transport import Transport, TransportList, TransportId
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL','sqlite:///data.db')
@@ -18,6 +18,7 @@ api = Api(app)
 jwt = JWT(app, authenticate, identity)  # /auth
 
 api.add_resource(Transport, '/transport/<string:name>')
+api.add_resource(TransportId, '/transport/<int:transport_id>')
 api.add_resource(TransportList, '/transports')
 api.add_resource(Report, '/report/<int:transport_id>')
 api.add_resource(ReportList, '/reports')

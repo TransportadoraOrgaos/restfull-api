@@ -15,11 +15,6 @@ class Transport(Resource):
         help="This field cannot be left blank!"
     )
 
-    def get(self, id):
-        transport = TransportModel.find_by_id(id)
-        if transport:
-            return transport.json()
-        return {'error_message': 'Transport not found'}, 404
 
     def post(self, name):
         if TransportModel.find_by_name(name):
@@ -43,6 +38,13 @@ class Transport(Resource):
 
         return {'success_message': 'Transport deleted'}
 
+class TransportId(Resource):
+    def get(self, transport_id):
+        transport = TransportModel.find_by_id(transport_id)
+        if transport:
+            return transport.json()
+        return {'error_message': 'Transport not found'}, 404
+    
 class TransportList(Resource):
-    def get(self):
+    def get(self,):
         return {'transports': list(map(lambda x: x.json(), TransportModel.query.all()))}
