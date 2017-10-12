@@ -7,8 +7,9 @@ class TransportModel(db.Model):
     name = db.Column(db.String(80))
     organ = db.Column(db.String(80))
     responsible = db.Column(db.String(80))
-    box_id = db.Column(db.Integer)
-
+    box_id = db.Column(db.Integer, db.ForeignKey('boxes.id'))
+    
+    box = db.relationship('BoxModel')
     reports = db.relationship('ReportModel', lazy='dynamic')
 
     def __init__(self, organ, responsible, box_id):

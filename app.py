@@ -8,6 +8,7 @@ from security import authenticate, identity
 from resources.user import User, UserAccess, UserList
 from resources.report import Report, ReportList
 from resources.transport import Transport, TransportList
+from resources.box import Box, BoxList
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL','sqlite:///data.db')
@@ -16,6 +17,10 @@ app.secret_key = 'EiEiO'
 api = Api(app)
 
 jwt = JWT(app, authenticate, identity)  # /auth
+
+#Boxes entry points
+api.add_resource(Box, '/box/<string:name>')
+api.add_resource(BoxList, '/boxes')
 
 #Transports entry points
 api.add_resource(Transport, '/transport/<int:transport_id>')
