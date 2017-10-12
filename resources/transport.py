@@ -14,15 +14,20 @@ class Transport(Resource):
         required=True,
         help="This field cannot be left blank!"
     )
+    
+    def get(self, transport_id):
+        transport = TransportModel.find_by_transport_id(transport_id)
+        if transport:
+            return transport.json()
+        return {'error_message': 'Transport not found'}, 404
 
-
-    def post(self, name):
-        if TransportModel.find_by_name(name):
-            return {'error_message': "A transport with name '{}' already exists.".format(name)}, 400
+    def post(self, transport_id):
+        if TransportModel.find_by_transport_id(transport_id):
+            return {'error_message': "A transport with transport_id '{}' already exists.".format(transport_id)}, 400
 
         data = Transport.parser.parse_args()
 
-        transport = TransportModel(name, data['organ'], data['responsible'])
+        transport = TransportModel(data['organ'], data['responsible'])
 
         try:
             transport.save_to_db()
@@ -31,20 +36,13 @@ class Transport(Resource):
 
         return transport.json(), 201
 
-    def delete(self, name):
-        transport = TransportModel.find_by_name(name)
+    def delete(self, transport_id):
+        transport = TransportModel.find_by_transport_id(transport_id)
         if transport:
             transport.delete_from_db()
 
         return {'success_message': 'Transport deleted'}
 
-class TransportId(Resource):
-    def get(self, transport_id):
-        transport = TransportModel.find_by_id(transport_id)
-        if transport:
-            return transport.json()
-        return {'error_message': 'Transport not found'}, 404
-    
 class TransportList(Resource):
-    def get(self,):
+    def get(self):
         return {'transports': list(map(lambda x: x.json(), TransportModel.query.all()))}
