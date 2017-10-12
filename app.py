@@ -5,7 +5,7 @@ from flask_restful import Api
 from flask_jwt import JWT
 
 from security import authenticate, identity
-from resources.user import UserRegister
+from resources.user import User, UserAccess, UserList
 from resources.report import Report, ReportList
 from resources.transport import Transport, TransportList, TransportId
 
@@ -17,12 +17,19 @@ api = Api(app)
 
 jwt = JWT(app, authenticate, identity)  # /auth
 
-api.add_resource(Transport, '/transport/<string:name>')
+#Transports entry points
+api.add_resource(Transport, '/transport/<int:transport_id>')
 api.add_resource(TransportId, '/transport/<int:transport_id>')
 api.add_resource(TransportList, '/transports')
+
+# Report entry points
 api.add_resource(Report, '/report/<int:transport_id>')
 api.add_resource(ReportList, '/reports')
-api.add_resource(UserRegister, '/register')
+
+# Users entry points
+api.add_resource(User, '/user')
+api.add_resource(UserList, '/users')
+api.add_resource(UserAccess, '/user_access/<string:username>')
 
 if __name__ == '__main__':
     from db import db
