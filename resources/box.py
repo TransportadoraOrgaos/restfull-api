@@ -1,5 +1,7 @@
 from flask_restful import Resource, reqparse
 from models.box import BoxModel
+from models.transport import TransportModel
+from models.report import ReportModel
 
 class Box(Resource):
 
@@ -24,10 +26,21 @@ class Box(Resource):
 
     def delete(self, name):
         box = BoxModel.find_by_name(name)
+        box_id = box.id
         if box:
+            transport = TransportModel.find_by_box_id(box_id)
+            if transport:
+                for transport in transport:
+                    transport_id = transport.id
+                    report = ReportModel.find_by_transport_id(transport_id)
+                    if report:
+                        for report in report:
+                            report.delete_from_db()
+                    transport.delete_from_db()
             box.delete_from_db()
-
-        return {'success_message': 'Box deleted'}
+            return {'success_message': 'Box deleted'}
+        else:
+            return {'error_message': 'error'}
 
 class BoxList(Resource):
     def get(self,):

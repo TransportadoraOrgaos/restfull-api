@@ -24,6 +24,10 @@ class TransportModel(db.Model):
     def find_by_transport_id(cls, id):
         return cls.query.filter_by(id=id).first()
 
+    @classmethod
+    def find_by_box_id(cls, box_id):
+        return cls.query.filter_by(box_id=box_id).all()
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
