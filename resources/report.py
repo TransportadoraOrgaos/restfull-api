@@ -66,7 +66,8 @@ class Report(Resource):
     def delete(self, transport_id):
         report = ReportModel.find_by_transport_id(transport_id)
         if report:
-            report.delete_from_db()
+            for report in report:
+                report.delete_from_db()
             return {'success_message': 'Report deleted'}
         return {'error_message': 'Report not encountered'}
 
