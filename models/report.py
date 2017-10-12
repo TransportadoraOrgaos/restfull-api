@@ -9,17 +9,17 @@ class ReportModel(db.Model):
     longitude = db.Column(db.Integer)
     temperature = db.Column(db.Integer)
     is_locked = db.Column(db.Integer)
-
     transport_id = db.Column(db.Integer, db.ForeignKey('transports.id'))
+    
     transport = db.relationship('TransportModel')
 
-    def __init__(self, date, latitude, longitude, temperature, transport_id, is_locked):
+    def __init__(self, date, latitude, longitude, temperature,  is_locked, transport_id):
         self.date = date
         self.latitude = latitude
         self.longitude = longitude
         self.temperature = temperature
-        self.transport_id = transport_id
         self.is_locked = is_locked
+        self.transport_id = transport_id
 
     def json(self):
         return {
@@ -27,8 +27,8 @@ class ReportModel(db.Model):
             'latitude': self.latitude,
             'longitude': self.longitude,
             'temperature': self.temperature,
-            'transport_id': self.transport_id,
-            'is_locked': self.is_locked
+            'is_locked': self.is_locked,
+            'transport_id': self.transport_id
         }
 
     @classmethod

@@ -47,7 +47,14 @@ class Report(Resource):
     def post(self, transport_id):
         data = Report.parser.parse_args()
 
-        report = ReportModel(data['date'], data['latitude'], data['longitude'], data['temperature'], data['transport_id'], data['is_locked'])
+        report = ReportModel(
+            data['date'], 
+            data['latitude'], 
+            data['longitude'], 
+            data['temperature'], 
+            data['is_locked'],
+            transport_id
+        )
 
         try:
             report.save_to_db()
