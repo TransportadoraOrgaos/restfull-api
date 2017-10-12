@@ -14,7 +14,12 @@ class Transport(Resource):
         required=True,
         help="This field cannot be left blank!"
     )
-    
+    parser.add_argument('box_id',
+        type=int,
+        required=True,
+        help="This field cannot be left blank!"
+    )
+
     def get(self, transport_id):
         transport = TransportModel.find_by_transport_id(transport_id)
         if transport:
@@ -27,7 +32,7 @@ class Transport(Resource):
 
         data = Transport.parser.parse_args()
 
-        transport = TransportModel(data['organ'], data['responsible'])
+        transport = TransportModel(data['organ'], data['responsible'], data['box_id'])
 
         try:
             transport.save_to_db()
