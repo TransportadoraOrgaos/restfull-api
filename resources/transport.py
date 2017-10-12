@@ -1,5 +1,6 @@
 from flask_restful import Resource, reqparse
 from models.transport import TransportModel
+from models.report import ReportModel
 
 class Transport(Resource):
     parser = reqparse.RequestParser()
@@ -44,9 +45,13 @@ class Transport(Resource):
     def delete(self, transport_id):
         transport = TransportModel.find_by_transport_id(transport_id)
         if transport:
+            transport_id = transport.id
+            report = ReportModel.find_by_transport_id(transport_id)
+            if report:
+                for report in report:
+                    report.delete_from_db()
             transport.delete_from_db()
-
-        return {'success_message': 'Transport deleted'}
+            return {'success_message': 'Transport deleted'}
 
 class TransportList(Resource):
     def get(self):
