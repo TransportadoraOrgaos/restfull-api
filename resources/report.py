@@ -35,6 +35,11 @@ class Report(Resource):
         required=True,
         help="All reports must have a transport_id!"
     )
+    parser.add_argument('enable',
+        type=int,
+        required=True,
+        help="This field cannot be left blank!"
+    )
 
     # @jwt_required()
     def get(self, transport_id):
@@ -53,7 +58,8 @@ class Report(Resource):
             data['longitude'], 
             data['temperature'], 
             data['is_locked'],
-            transport_id
+            transport_id,
+            data['enable']
         )
 
         try:
