@@ -20,7 +20,7 @@ class User(Resource):
         help="This field cannot be blank."
     )    
     parser.add_argument('access_level',
-        type=int,
+        type=str,
         required=True,
         help="This field cannot be blank."
     )
@@ -31,8 +31,6 @@ class User(Resource):
         required=True,
         help="This field cannot be blank."
     )
-    
-
     
     def post(self):
         data = User.parser.parse_args()

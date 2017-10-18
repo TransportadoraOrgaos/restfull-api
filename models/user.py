@@ -7,7 +7,7 @@ class UserModel(db.Model):
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
     email = db.Column(db.String(80))
-    access_level = db.Column(db.Integer)
+    access_level = db.Column(db.String(80))
 
     def __init__(self, username, password, email, access_level):
         self.username = username
