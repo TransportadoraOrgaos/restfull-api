@@ -19,11 +19,11 @@ class User(Resource):
         required=True,
         help="This field cannot be blank."
     )    
-    parser.add_argument('access_level',
-        type=str,
-        required=True,
-        help="This field cannot be blank."
-    )
+    # parser.add_argument('access_level',
+    #     type=str,
+    #     required=True,
+    #     help="This field cannot be blank."
+    # )
     #Only username parser
     username_parser = reqparse.RequestParser()
     username_parser.add_argument('username',
@@ -38,7 +38,7 @@ class User(Resource):
         if UserModel.find_by_username(data['username']):
             return {"error_message": "A user with that username already exists"}, 400
 
-        user = UserModel(data['username'], data['password'], data['email'], data['access_level'])
+        user = UserModel(data['username'], data['password'], data['email'])
         user.save_to_db()
 
         return {"success_message": "User created successfully."}, 201
@@ -60,8 +60,8 @@ class UserAccess(Resource):
         user = UserModel.find_by_username(username)
         if user:
             return {
-                'username': user.username,
-                'access_level': user.access_level
+                'username': user.username
+                # 'access_level': user.access_level
             }
         else:
             return {'error_message': 'User not found'}
