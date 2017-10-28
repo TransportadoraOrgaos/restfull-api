@@ -27,20 +27,6 @@ class Transport(Resource):
             return transport.json()
         return {'error_message': 'Transport not found'}, 404
 
-    def post(self, transport_id):
-        if TransportModel.find_by_transport_id(transport_id):
-            return {'error_message': "A transport with transport_id '{}' already exists.".format(transport_id)}, 400
-
-        data = Transport.parser.parse_args()
-
-        transport = TransportModel(data['organ'], data['responsible'], data['box_id'])
-
-        try:
-            transport.save_to_db()
-        except:
-            return {"error_message": "An error occurred creating the transport."}, 500
-
-        return transport.json(), 201
 
     def delete(self, transport_id):
         transport = TransportModel.find_by_transport_id(transport_id)
@@ -52,6 +38,19 @@ class Transport(Resource):
                     report.delete_from_db()
             transport.delete_from_db()
             return {'success_message': 'Transport deleted'}
+
+class TransportCreate(Resource):
+    def post(self):
+        data = Transport.parser.parse_args()
+
+        transport = TransportModel(data['organ'], data['responsible'], data['box_id'])
+
+        try:
+            transport.save_to_db()
+        except:
+            return {"error_message": "An error occurred creating the transport."}, 500
+
+        return transport.json(), 201
 
 class TransportList(Resource):
     def get(self):
