@@ -11,17 +11,17 @@ class Report(Resource):
         help="This field cannot be left blank!"
     )
     parser.add_argument('latitude',
-        type=int,
+        type=float,
         required=True,
         help="This field cannot be left blank!"
     )
     parser.add_argument('longitude',
-        type=int,
+        type=float,
         required=True,
         help="This field cannot be left blank!"
     )
     parser.add_argument('temperature',
-        type=int,
+        type=float,
         required=True,
         help="This field cannot be left blank!"
     )

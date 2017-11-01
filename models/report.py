@@ -5,9 +5,9 @@ class ReportModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.String(80))
-    latitude = db.Column(db.Integer)
-    longitude = db.Column(db.Integer)
-    temperature = db.Column(db.Integer)
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
+    temperature = db.Column(db.Float)
     is_locked = db.Column(db.Integer)
     enable = db.Column(db.Integer)
     transport_id = db.Column(db.Integer, db.ForeignKey('transports.id'))
