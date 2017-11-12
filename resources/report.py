@@ -77,20 +77,6 @@ class Report(Resource):
             return {'success_message': 'Report deleted'}
         return {'error_message': 'Report not encountered'}
 
-    def put(self, transport_id):
-        data = Report.parser.parse_args()
-
-        report = ReportModel.find_by_transport_id(transport_id)
-
-        if report:
-            report.date = data['date']
-        else:
-            report = ReportModel(transport_id, data['date'])
-
-        report.save_to_db()
-
-        return report.json()
-
 class ReportList(Resource):
     def get(self):
         return {'reports': list(map(lambda x: x.json(), ReportModel.query.all()))}
