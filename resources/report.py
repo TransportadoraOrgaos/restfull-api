@@ -41,7 +41,7 @@ class Report(Resource):
         help="This field cannot be left blank!"
     )
 
-    # @jwt_required()
+    @jwt_required()
     def get(self, transport_id):
         return {'reports': list(map(lambda x: x.json(), ReportModel.query.filter_by(transport_id=transport_id).all()))}
         #report = ReportModel.find_by_transport_id(transport_id)
@@ -69,6 +69,7 @@ class Report(Resource):
 
         return report.json(), 201
 
+    @jwt_required()
     def delete(self, transport_id):
         report = ReportModel.find_by_transport_id(transport_id)
         if report:

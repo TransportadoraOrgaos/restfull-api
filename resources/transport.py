@@ -1,4 +1,5 @@
 from flask_restful import Resource, reqparse
+from flask_jwt import jwt_required
 from models.transport import TransportModel
 from models.report import ReportModel
 
@@ -21,13 +22,14 @@ class Transport(Resource):
         help="This field cannot be left blank!"
     )
 
+    @jwt_required()
     def get(self, transport_id):
         transport = TransportModel.find_by_transport_id(transport_id)
         if transport:
             return transport.json()
         return {'error_message': 'Transport not found'}, 404
 
-
+    @jwt_required()
     def delete(self, transport_id):
         transport = TransportModel.find_by_transport_id(transport_id)
         if transport:
@@ -40,6 +42,7 @@ class Transport(Resource):
             return {'success_message': 'Transport deleted'}
 
 class TransportCreate(Resource):
+    @jwt_required()
     def post(self):
         data = Transport.parser.parse_args()
 
@@ -53,5 +56,6 @@ class TransportCreate(Resource):
         return transport.json(), 201
 
 class TransportList(Resource):
+    @jwt_required()
     def get(self):
         return {'transports': list(map(lambda x: x.json(), TransportModel.query.all()))}

@@ -1,16 +1,19 @@
 from flask_restful import Resource, reqparse
+from flask_jwt import jwt_required
 from models.box import BoxModel
 from models.transport import TransportModel
 from models.report import ReportModel
 
 class Box(Resource):
 
+    @jwt_required()
     def get(self, name):
         box = BoxModel.find_by_name(name)
         if box:
             return box.json()
         return {'error_message': 'Box not found'}, 404
 
+    @jwt_required()
     def post(self, name):
         if BoxModel.find_by_name(name):
             return {'error_message': "A box with name '{}' already exists.".format(name)}, 400
@@ -24,6 +27,7 @@ class Box(Resource):
 
         return box.json(), 201
 
+    @jwt_required()
     def delete(self, name):
         box = BoxModel.find_by_name(name)
         box_id = box.id
@@ -43,5 +47,6 @@ class Box(Resource):
             return {'error_message': 'error'}
 
 class BoxList(Resource):
+    @jwt_required()
     def get(self,):
         return {'boxes': list(map(lambda x: x.json(), BoxModel.query.all()))}

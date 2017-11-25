@@ -1,4 +1,5 @@
 from flask_restful import Resource, reqparse
+from flask_jwt import jwt_required
 from models.user import UserModel
 
 class User(Resource):
@@ -31,7 +32,7 @@ class User(Resource):
         required=True,
         help="This field cannot be blank."
     )
-    
+
     def post(self):
         data = User.parser.parse_args()
 
@@ -43,6 +44,7 @@ class User(Resource):
 
         return {"success_message": "User created successfully."}, 201
 
+    @jwt_required()
     def delete(self):
         data = User.username_parser.parse_args()
         if UserModel.find_by_username(data['username']):
@@ -68,5 +70,6 @@ class UserAccess(Resource):
 
 
 class UserList(Resource):
+    @jwt_required()
     def get(self):
         return {'users': list(map(lambda x: x.json(), UserModel.query.all()))}
