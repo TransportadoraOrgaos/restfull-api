@@ -6,7 +6,7 @@ from flask_jwt import JWT
 
 from security import authenticate, identity
 from resources.user import User, UserAccess, UserList
-from resources.report import Report, ReportList
+from resources.report import Report, ReportCreate, ReportList
 from resources.transport import Transport, TransportList, TransportCreate
 from resources.box import Box, BoxList
 
@@ -30,7 +30,7 @@ api.add_resource(TransportList, '/transports')
 # Report entry points
 api.add_resource(Report, '/report/<int:transport_id>')
 api.add_resource(ReportList, '/reports')
-
+api.add_resource(ReportCreate, '/createreport')
 # Users entry points
 api.add_resource(User, '/user')
 api.add_resource(UserList, '/users')

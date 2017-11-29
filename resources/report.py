@@ -78,6 +78,27 @@ class Report(Resource):
             return {'success_message': 'Report deleted'}
         return {'error_message': 'Report not encountered'}
 
+class ReportCreate(Resource):
+    def post(self):
+        data = Report.parser.parse_args()
+
+        report = ReportModel(
+            data['date'], 
+            data['latitude'], 
+            data['longitude'], 
+            data['temperature'], 
+            data['is_locked'],
+            data['transport_id'],
+            data['enable']
+        )
+
+        try:
+            report.save_to_db()
+        except:
+            return {"error_message": "An error occurred creating the report."}, 500
+
+        return report.json(), 201
+
 class ReportList(Resource):
     def get(self):
         return {'reports': list(map(lambda x: x.json(), ReportModel.query.all()))}
