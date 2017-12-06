@@ -6,13 +6,28 @@ class UserModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
+    email = db.Column(db.String(80))
+    access_level = db.Column(db.String(80))
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, email, access_level):
         self.username = username
         self.password = password
+        self.email = email
+        self.access_level = access_level
+
+    def json(self):
+        return {
+            'username': self.username,
+            'email': self.email,
+            'access_level': self.access_level,
+        }
 
     def save_to_db(self):
         db.session.add(self)
+        db.session.commit()
+
+    def delete_from_db(self):
+        db.session.delete(self)
         db.session.commit()
 
     @classmethod
