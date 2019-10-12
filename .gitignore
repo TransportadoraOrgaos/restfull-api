@@ -1,4 +1,13 @@
-__pycache__
-__pycache__/
-.DS_Store
 *.pyc
+.vscode/
+venv/
+__pycache__
+.DS_Store/
+migrations/
+postgres-data/
+.mypy_cache
+.pytest_cache
+api.log
+test.db
+creds.ini
+.env

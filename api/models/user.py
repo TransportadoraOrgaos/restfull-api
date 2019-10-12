@@ -1,13 +1,16 @@
-from db import db
+from api.core import Mixin
+from .base import db
 
-class UserModel(db.Model):
-    __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+class User(Mixin, db.Model):
+    """User Table."""
+
+    __tablename__ = "user"
+
+    id = db.Column(db.Integer, unique=True, primary_key=True)
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
     email = db.Column(db.String(80))
-    access_level = db.Column(db.String(80))
 
     def __init__(self, username, password, email, access_level):
         self.username = username
@@ -19,7 +22,6 @@ class UserModel(db.Model):
         return {
             'username': self.username,
             'email': self.email,
-            'access_level': self.access_level,
         }
 
     def save_to_db(self):
@@ -37,3 +39,6 @@ class UserModel(db.Model):
     @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
+
+    def __repr__(self):
+        return f"<user {self.user}>"  # noqa: E999

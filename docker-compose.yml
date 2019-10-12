@@ -1,0 +1,41 @@
+version: "3.3"
+services:
+    postgres:
+        container_name: postgres
+        restart: always
+        image: postgres:10
+        environment:
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=${POSTGRES_DB}
+        volumes:
+            - flask-app-db:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+    app:
+        container_name: app
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile-dev
+        environment:
+            - FLASK_ENV=docker
+        ports:
+            - 5000:5000
+        volumes:
+            - .:/app
+        entrypoint:
+            - /app/scripts/docker_script.sh
+
+    pgadmin:
+        image: dpage/pgadmin4
+        container_name: pgadmin
+        ports:
+            - "5433:80"
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=admin@admin.com.br
+            - PGADMIN_DEFAULT_PASSWORD=password
+        volumes:
+            - ./.ignore/var/lib/pgadmin:/var/lib/pgadmin
+# volumes:
+#   flask-app-db:

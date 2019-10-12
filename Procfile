@@ -1,1 +1,2 @@
-web: uwsgi uwsgi.ini
+web: gunicorn manage:app
+worker: python manage.py runworker
